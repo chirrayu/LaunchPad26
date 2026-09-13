@@ -2,6 +2,7 @@ import os
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS
+from pymongo.errors import PyMongoError
 
 from routes.get_items import get_items
 from routes.get_item import get_item
@@ -14,6 +15,11 @@ load_dotenv()
 app = Flask(__name__)
 allowed_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
 CORS(app, origins=[origin.strip() for origin in allowed_origins.split(",")])
+
+
+@app.errorhandler(PyMongoError)
+def handle_database_error(error):
+    return {"error": "Database unavailable", "details": str(error)}, 503
 
 
 @app.route("/", methods=["GET"])
