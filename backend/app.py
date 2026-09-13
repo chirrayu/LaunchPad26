@@ -16,6 +16,11 @@ allowed_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
 CORS(app, origins=[origin.strip() for origin in allowed_origins.split(",")])
 
 
+@app.route("/", methods=["GET"])
+def home():
+    return {"name": "LaunchPad API", "status": "ok"}
+
+
 @app.route("/health", methods=["GET"])
 def health_check():
     return {"status": "ok"}
