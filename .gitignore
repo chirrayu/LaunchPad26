@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+.venv/
+env/
+
+# Environment variables — NEVER commit the real .env
+.env
+
+# Uploaded images — keep the folder, ignore contents
+backend/images/*
+!backend/images/.gitkeep
+
+# Node
+node_modules/
+dist/
+.DS_Store
+
+# Vite
+frontend/.vite/
