@@ -12,7 +12,18 @@ from routes.get_image import get_image
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+allowed_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
+CORS(app, origins=[origin.strip() for origin in allowed_origins.split(",")])
+
+
+@app.route("/", methods=["GET"])
+def home():
+    return {"name": "LaunchPad API", "status": "ok"}
+
+
+@app.route("/health", methods=["GET"])
+def health_check():
+    return {"status": "ok"}
 
 
 @app.route("/items", methods=["GET"])
@@ -42,4 +53,4 @@ def route_get_image(filename):
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
-    app.run(debug=True, port=port)
+    app.run(host="0.0.0.0", port=port, debug=os.getenv("FLASK_DEBUG") == "1")
