@@ -1,12 +1,14 @@
-const BASE_URL = "";
+const BASE_URL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
 
 export async function getItems(search = "") {
-  const res = await fetch(`${BASE_URL}/items?search=${search}`);
+  const res = await fetch(`${BASE_URL}/items?search=${encodeURIComponent(search)}`);
+  if (!res.ok) throw new Error("Could not load items");
   return res.json();
 }
 
 export async function getItem(id) {
   const res = await fetch(`${BASE_URL}/items/${id}`);
+  if (!res.ok) throw new Error("Could not load item");
   return res.json();
 }
 
@@ -19,11 +21,13 @@ export async function createItem(fields, imageFile) {
     method: "POST",
     body: formData,
   });
+  if (!res.ok) throw new Error("Could not create item");
   return res.json();
 }
 
 export async function deleteItem(id) {
-  await fetch(`${BASE_URL}/items/${id}`, { method: "DELETE" });
+  const res = await fetch(`${BASE_URL}/items/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Could not delete item");
 }
 
 export function imageUrl(filename) {
